@@ -1,0 +1,71 @@
+def tablas(n, nombre_archivo):
+    archivo = open(nombre_archivo, 'w')
+    for i in range(1,11):
+        multi = n * i
+        if i < 10:
+            archivo.write(str(n) + '*' + str(i) + '=' + str(multi) + '\n')
+        else:
+            archivo.write(str(n) + '*' + str(i) + '=' + str(multi))
+    archivo.close()
+
+def imprimir_tabla(nombre_archivo):
+    tabla = list()
+    try:
+        archivo = open(nombre_archivo, 'r')
+    except FileNotFoundError as error:
+        print('El archivo con la tabla de multiplicar no existe!')
+    else:
+        for linea in archivo:
+            tabla.append(linea.split()[0])
+    finally:
+        if 'archivo' in locals():
+            archivo.close()
+    return tabla
+
+def buscar_multi(m, nombre_archivo):
+    try:
+        archivo = open(nombre_archivo, 'r')
+    except FileNotFoundError as error:
+        print('El archivo con la tabla de multiplicar no existe!')
+    else:
+        for _ in range(m-1):
+            archivo.readline()
+        return archivo.readline()
+    finally:
+        if 'archivo' in locals():
+            archivo.close()
+
+try:
+    print("*************** MENU ****************\n" + "1. Crear Tabla.\n" + "2. Imprimir Tabla.\n" + "3. Buscar Multiplo.")
+    while True:
+        opc = int(input("Escoja una opcion: "))
+        if opc >= 1 and opc <= 3:
+            break
+    if opc == 3:
+        while True:
+            numero = int(input('Introduzca un numero entero N 1-10: '))
+            m = int(input('Introduzca un numero entero M 1-10: '))
+            if numero >= 1 and numero <= 10 and m >= 1 and m <= 10:
+                nombre_archivo = 'datos/tabla-' + str(numero) + '.txt'
+                valor = buscar_multi(m, nombre_archivo)
+                print(valor)
+                break
+    elif opc == 2:
+        while True:
+            numero = int(input('Introduzca un numero entre 1-10: '))
+            if numero >= 1 and numero <= 10:
+                nombre_archivo = 'datos/tabla-' + str(numero) + '.txt'
+                tabla = imprimir_tabla(nombre_archivo)
+                for i in range(10):
+                    print(tabla[i])
+                break
+    elif opc == 1:
+        while True:
+            numero = int(input('Introduzca un numero entre 1-10: '))
+            if numero >= 1 and numero <= 10:
+                nombre_archivo = 'datos/tabla-' + str(numero) + '.txt'
+                tablas(numero, nombre_archivo)
+                print("Tabla creada con exito.")
+                break            
+except ValueError as error:
+    print(error)
